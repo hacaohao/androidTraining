@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Tut2</string>
+    <string name="author"><![CDATA[<font color="#0A295A">%1$s</font>]]> in <![CDATA[<font color="#0A295A">%2$s</font>]]></string>
+    <string name="sticky_post"><![CDATA[<font color="#387801">[M]</font>]]></string>
+    <string name="footer_info">See more interesting posts about Android development at https://www.reddit.com/r/androiddev/</string>
+</resources>
