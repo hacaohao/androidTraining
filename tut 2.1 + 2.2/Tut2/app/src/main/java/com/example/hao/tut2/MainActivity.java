@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,7 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
     private ArrayList<Post> mPosts;
     private String mUrl = "https://www.reddit.com/r/androiddev/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         mPosts = PostLab.get(MainActivity.this).getPosts();
 
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 
             View footerTextView = ((LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.text_view_footer, null, false);
             footerTextView.setOnClickListener(new View.OnClickListener() {
@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-        }else{
-            GridView gridView = (GridView)findViewById(R.id.grid_view_post);
+        } else {
+            GridView gridView = (GridView) findViewById(R.id.grid_view_post);
             if (MainActivity.this == null || gridView == null) return;
 
             if (mPosts != null) {
@@ -70,7 +70,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+    }
 
+    private void startPostActivity(UUID id, String url) {
+        Intent intent = new Intent(MainActivity.this, PostViewActivity.class);
+        intent.putExtra(PostViewActivity.EXTRA_ID, id);
+        intent.putExtra(PostViewActivity.EXTRA_URL, url);
+
+        startActivity(intent);
     }
 
     //dùng cho list view
@@ -91,14 +98,14 @@ public class MainActivity extends AppCompatActivity {
             String author = getString(R.string.author, post.getAuthor(), post.getSubreddit());
             TextView textViewAuthor = (TextView) convertView.findViewById(R.id.text_view_author);
             String bonus = "";
-            if(position == 0){//do dòng này nên ko dc tái sử dụng convert view
+            if (position == 0) {//do dòng này nên ko dc tái sử dụng convert view
                 bonus = getString(R.string.sticky_post);
             }
             textViewAuthor.setText(Html.fromHtml(author + " " + bonus));
 
             TextView textViewContent = (TextView) convertView.findViewById(R.id.text_view_content);
 
-            if(position == 0){//do dòng này nên ko dc tái sử dụng convert view
+            if (position == 0) {//do dòng này nên ko dc tái sử dụng convert view
                 textViewContent.setTextColor(Color.parseColor("#387801"));
             }
             textViewContent.setText(post.getContent());
@@ -119,8 +126,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //dùng cho grid view
-    private class PostGridAdapter extends ArrayAdapter<Post>{
-        public PostGridAdapter(ArrayList<Post> posts){
+    private class PostGridAdapter extends ArrayAdapter<Post> {
+        public PostGridAdapter(ArrayList<Post> posts) {
             super(MainActivity.this, 0, posts);
         }
 
@@ -138,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
             TextView textViewContent = (TextView) convertView.findViewById(R.id.text_view_content);
 
-            if(position == 0){//do dòng này nên ko dc tái sử dụng convert view
+            if (position == 0) {//do dòng này nên ko dc tái sử dụng convert view
                 textViewContent.setTextColor(Color.parseColor("#387801"));
             }
             textViewContent.setText(post.getContent());
@@ -156,13 +163,5 @@ public class MainActivity extends AppCompatActivity {
 
             return convertView;
         }
-    }
-
-    private void startPostActivity(UUID id, String url){
-        Intent intent = new Intent(MainActivity.this, PostViewActivity.class);
-        intent.putExtra(PostViewActivity.EXTRA_ID, id);
-        intent.putExtra(PostViewActivity.EXTRA_URL, url);
-
-        startActivity(intent);
     }
 }
