@@ -1,9 +1,11 @@
 package com.example.hao.tut24;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by hao on 2/10/2016.
@@ -20,13 +23,17 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public static final int HEADER = 0;
     public static final int CHILD = 1;
     public static final int LAND = 2;
+    public static final int LIST_FOOTER = 3;
 
-    private Context mContext;
+    private static final String mUrl = "https://www.reddit.com/r/androiddev/";
+    private static Context mContext;
     private List<Item> mItems;
+    private View mFooter;
 
-    public ExpandableListAdapter(Context context, List<Item> items) {
+    public ExpandableListAdapter(Context context, List<Item> items, View footer) {
         mContext = context;
         mItems = items;
+        mFooter = footer;
     }
 
     @Override
@@ -47,14 +54,20 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 v = inflater.inflate(R.layout.grid_item_post, parent, false);
                 ListChildViewHolder landChild = new ListChildViewHolder(v);
                 return landChild;
+            case LIST_FOOTER:
+                v = inflater.inflate(R.layout.text_view_footer, parent, false);
+                ListFooterViewHolder footer = new ListFooterViewHolder(v);
+                return footer;
         }
         return null;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (position == mItems.size()) return;
         final Item item = mItems.get(position);
-        switch (item.getType()) {
+        int type = item.getType();
+        switch (type) {
             case HEADER:
                 final ListHeaderViewHolder itemController = (ListHeaderViewHolder) holder;
                 itemController.header_title.setText(item.getHeader());
@@ -94,6 +107,8 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             case CHILD:
                 Post post = item.getPost();
                 ListChildViewHolder childController = (ListChildViewHolder) holder;
+                childController.bind(post.getId());
+
                 childController.textViewPostScore.setText(String.valueOf(post.getPostScore()));
 
                 String comments = (post.getComments() <= 1) ? " comment" : " comments";
@@ -115,6 +130,8 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             case LAND:
                 Post landPost = item.getPost();
                 ListChildViewHolder landChildController = (ListChildViewHolder) holder;
+                landChildController.bind(landPost.getId());
+
                 landChildController.textViewPostScore.setText(String.valueOf(landPost.getPostScore()));
 
                 String landComments = (landPost.getComments() <= 1) ? " comment" : " comments";
@@ -138,12 +155,18 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemCount() {
+        if (mFooter != null) return mItems.size() + 1;
         return mItems.size();
     }
 
     @Override
     public int getItemViewType(int position) {
+        if(isPositionFooter(position)) return LIST_FOOTER;
         return mItems.get(position).getType();
+    }
+
+    private boolean isPositionFooter(int position){
+        return position == mItems.size();
     }
 
     private static class ListHeaderViewHolder extends RecyclerView.ViewHolder {
@@ -174,5 +197,35 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             textViewDomain = (TextView) itemView.findViewById(R.id.text_view_domain);
             textViewDate = (TextView) itemView.findViewById(R.id.text_view_date_time);
         }
+
+        public void bind(final UUID id){
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ExpandableListAdapter.startPostActivity(id, null);
+                }
+            });
+        }
+    }
+
+    private static class ListFooterViewHolder extends RecyclerView.ViewHolder{
+
+        public ListFooterViewHolder(View itemView) {
+            super(itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ExpandableListAdapter.startPostActivity(null, mUrl);
+                }
+            });
+        }
+    }
+
+    private static void startPostActivity(UUID id, String url) {
+        Intent intent = new Intent(mContext, PostViewActivity.class);
+        intent.putExtra(PostViewActivity.EXTRA_ID, id);
+        intent.putExtra(PostViewActivity.EXTRA_URL, url);
+
+        mContext.startActivity(intent);
     }
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tut2.3</string>
+    <string name="app_name">Tut2.4</string>
     <string name="author"><![CDATA[<font color="#0A295A">%1$s</font>]]> in <![CDATA[<font color="#0A295A">%2$s</font>]]></string>
     <string name="footer_info">See more interesting posts about Android development at https://www.reddit.com/r/androiddev/</string>
 </resources>
