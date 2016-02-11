@@ -23,7 +23,7 @@
         <item name="android:layout_width">9dp</item>
         <item name="android:layout_height">9dp</item>
         <item name="android:layout_marginLeft">8dp</item>
-        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginTop">8dp</item>
         <item name="android:src">@drawable/dot</item>
     </style>
 </resources>
