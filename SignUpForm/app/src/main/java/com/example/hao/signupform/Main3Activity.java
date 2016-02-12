@@ -4,18 +4,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 public class Main3Activity extends AppCompatActivity {
-    private Button mSendButton, mRestartButton;
-
-    private String mFirstName;
-    private String mLastName;
-    private String mEmail;
-    private String mPhone;
-    private String mSalary;
+    private String mFirstName, mLastName, mEmail, mPhone, mSalary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +21,7 @@ public class Main3Activity extends AppCompatActivity {
         mPhone = getIntent().getStringExtra(Main2Activity.EXTRA_PHONE);
         mSalary = getIntent().getStringExtra(Main2Activity.EXTRA_SALARY);
 
-        mSendButton = (Button) findViewById(R.id.send_button);
+        Button mSendButton = (Button) findViewById(R.id.send_button);
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,7 +36,7 @@ public class Main3Activity extends AppCompatActivity {
             }
         });
 
-        mRestartButton = (Button) findViewById(R.id.restart_button);
+        Button mRestartButton = (Button) findViewById(R.id.restart_button);
         mRestartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,40 +1,45 @@
-package com.example.hao.signupform;
+package com.example.hao.tut31;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Patterns;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * Created by hao on 2/12/2016.
+ */
+public class UserSignUpFragment extends Fragment {
     private EditText mFirstNameEditText, mLastNameEditText, mEmailEditText, mPhoneEditText;
     private String mFirstName, mLastName, mEmail, mPhone;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_user_sign_up, parent, false);
 
-        mFirstNameEditText = (EditText) findViewById(R.id.editTextFirstName);
+        mFirstNameEditText = (EditText) view.findViewById(R.id.editTextFirstName);
 
-        mLastNameEditText = (EditText) findViewById(R.id.editTextLastName);
+        mLastNameEditText = (EditText) view.findViewById(R.id.editTextLastName);
 
-        mEmailEditText = (EditText) findViewById(R.id.editTextEmail);
+        mEmailEditText = (EditText) view.findViewById(R.id.editTextEmail);
 
-        mPhoneEditText = (EditText) findViewById(R.id.editTextPhone);
+        mPhoneEditText = (EditText) view.findViewById(R.id.editTextPhone);
 
-        Button mNextButton = (Button) findViewById(R.id.btnNext);
+        Button mNextButton = (Button) view.findViewById(R.id.btnNext);
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startNewScreen();
             }
         });
+
+        return view;
     }
 
-    //lay input cua user
     private void getInput() {
         mFirstName = mFirstNameEditText.getText().toString();
         mLastName = mLastNameEditText.getText().toString();
@@ -42,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         mPhone = mPhoneEditText.getText().toString();
     }
 
-    //Khi nhan nut NEXT, validate input va throw loi tuong duong, neu khong co loi thi tao man hinh moi
     private void startNewScreen() {
         getInput();
 
@@ -60,11 +64,11 @@ public class MainActivity extends AppCompatActivity {
         else if (!isPhoneEmpty) mPhoneEditText.setError("You must enter phone");
         else if (!isPhoneValid) mPhoneEditText.setError("PhoneNumber is invalid");
         else {
-            Intent intent = new Intent(MainActivity.this, Main2Activity.class);
-            intent.putExtra(Main2Activity.EXTRA_FNAME, mFirstName);
-            intent.putExtra(Main2Activity.EXTRA_LNAME, mLastName);
-            intent.putExtra(Main2Activity.EXTRA_EMAIL, mEmail);
-            intent.putExtra(Main2Activity.EXTRA_PHONE, mPhone);
+            Intent intent = new Intent(getActivity(), UserInfoActivity.class);
+            intent.putExtra(UserInfoFragment.EXTRA_FNAME, mFirstName);
+            intent.putExtra(UserInfoFragment.EXTRA_LNAME, mLastName);
+            intent.putExtra(UserInfoFragment.EXTRA_EMAIL, mEmail);
+            intent.putExtra(UserInfoFragment.EXTRA_PHONE, mPhone);
             startActivity(intent);
         }
     }

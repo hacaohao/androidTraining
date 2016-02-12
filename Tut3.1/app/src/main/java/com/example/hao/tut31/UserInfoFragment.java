@@ -1,39 +1,64 @@
-package com.example.hao.signupform;
+package com.example.hao.tut31;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Main2Activity extends AppCompatActivity {
+/**
+ * Created by hao on 2/12/2016.
+ */
+public class UserInfoFragment extends Fragment {
     public static final String EXTRA_FNAME = "first_name";
     public static final String EXTRA_LNAME = "last_name";
     public static final String EXTRA_EMAIL = "email";
     public static final String EXTRA_PHONE = "phone";
     public static final String EXTRA_SALARY = "salary";
 
+    private SeekBar mSeekBar;
+    private TextView mTextView;
+    private Button mButton;
     private CheckBox checkBox1, checkBox2, checkBox3, checkBox4, checkBox5, checkBox6;
 
     private String mFirstName, mLastName, mEmail, mPhone, mSalary;
 
+    public static UserInfoFragment newInstance(String fName, String lName, String email, String phone) {
+        Bundle agrs = new Bundle();
+
+        agrs.putSerializable(EXTRA_FNAME, fName);
+        agrs.putSerializable(EXTRA_LNAME, lName);
+        agrs.putSerializable(EXTRA_EMAIL, email);
+        agrs.putSerializable(EXTRA_PHONE, phone);
+
+        UserInfoFragment fragment = new UserInfoFragment();
+        fragment.setArguments(agrs);
+
+        return fragment;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        mFirstName = getArguments().getString(EXTRA_FNAME);
+        mLastName = getArguments().getString(EXTRA_LNAME);
+        mEmail = getArguments().getString(EXTRA_EMAIL);
+        mPhone = getArguments().getString(EXTRA_PHONE);
+    }
 
-        mFirstName = getIntent().getStringExtra(EXTRA_FNAME);
-        mLastName = getIntent().getStringExtra(EXTRA_LNAME);
-        mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
-        mPhone = getIntent().getStringExtra(EXTRA_PHONE);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_user_info, parent, false);
 
-        final TextView mTextView = (TextView) findViewById(R.id.textViewSalary);
+        mTextView = (TextView) view.findViewById(R.id.textViewSalary);
 
-        SeekBar mSeekBar = (SeekBar) findViewById(R.id.seekBar);
+        mSeekBar = (SeekBar) view.findViewById(R.id.seekBar);
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -56,26 +81,28 @@ public class Main2Activity extends AppCompatActivity {
         mSeekBar.setProgress(32800);
         mSeekBar.incrementProgressBy(100);
 
-        checkBox1 = (CheckBox) findViewById(R.id.checkBox1);
-        checkBox2 = (CheckBox) findViewById(R.id.checkBox2);
-        checkBox3 = (CheckBox) findViewById(R.id.checkBox3);
-        checkBox4 = (CheckBox) findViewById(R.id.checkBox4);
-        checkBox5 = (CheckBox) findViewById(R.id.checkBox5);
-        checkBox6 = (CheckBox) findViewById(R.id.checkBox6);
+        checkBox1 = (CheckBox) view.findViewById(R.id.checkBox1);
+        checkBox2 = (CheckBox) view.findViewById(R.id.checkBox2);
+        checkBox3 = (CheckBox) view.findViewById(R.id.checkBox3);
+        checkBox4 = (CheckBox) view.findViewById(R.id.checkBox4);
+        checkBox5 = (CheckBox) view.findViewById(R.id.checkBox5);
+        checkBox6 = (CheckBox) view.findViewById(R.id.checkBox6);
 
-        Button mButton = (Button) findViewById(R.id.done_button);
+        mButton = (Button) view.findViewById(R.id.done_button);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 validate();
             }
         });
+
+        return view;
     }
 
     private void validate() {
         if (checkBox1.isChecked() || checkBox2.isChecked() || checkBox3.isChecked()
                 || checkBox4.isChecked() || checkBox5.isChecked() || checkBox6.isChecked()) {
-            Intent intent = new Intent(Main2Activity.this, Main3Activity.class);
+            Intent intent = new Intent(getActivity(), UserConfirmActivity.class);
 
             intent.putExtra(EXTRA_FNAME, mFirstName);
             intent.putExtra(EXTRA_LNAME, mLastName);
@@ -86,7 +113,7 @@ public class Main2Activity extends AppCompatActivity {
             startActivity(intent);
         } else {
             Toast.makeText(
-                    Main2Activity.this,
+                    getActivity(),
                     "Select at least 1 sport",
                     Toast.LENGTH_SHORT
             ).show();

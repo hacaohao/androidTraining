@@ -1,31 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.example.hao.signupform"
+<manifest package="com.example.hao.tut31"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/main_text">
+        <activity android:name=".UserSignUpActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Main2Activity"
-            android:label="@string/second_text">
-        </activity>
-        <activity
-            android:name=".Main3Activity"
-            android:label="@string/third_text">
-        </activity>
+        <activity android:name=".UserInfoActivity"></activity>
+        <activity android:name=".UserConfirmActivity"></activity>
     </application>
 
 </manifest>
