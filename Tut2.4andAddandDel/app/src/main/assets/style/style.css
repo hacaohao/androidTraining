@@ -1,0 +1,15 @@
+*{
+	padding:0;
+	margin:5px;
+}
+
+#post{
+	font-size:40px;
+}
+
+#title{
+	font-size:30px;
+}
+#comment{
+	color:#878787;
+}

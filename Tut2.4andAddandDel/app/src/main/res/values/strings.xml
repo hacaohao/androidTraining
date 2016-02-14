@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Tut2.4 v2</string>
+    <string name="author"><![CDATA[<font color="#0A295A">%1$s</font>]]> in <![CDATA[<font color="#0A295A">%2$s</font>]]></string>
+    <string name="action_add">New post</string>
+    <string name="action_del">Delete posts</string>
+    <string name="footer_info">See more interesting posts about Android development at https://www.reddit.com/r/androiddev/</string>
+</resources>

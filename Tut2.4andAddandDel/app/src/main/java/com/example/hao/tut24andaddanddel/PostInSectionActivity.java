@@ -1,0 +1,166 @@
+package com.example.hao.tut24andaddanddel;
+
+import android.app.FragmentManager;
+import android.content.Context;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class PostInSectionActivity extends AppCompatActivity implements NewPostDialog.NewPostDialogListener {
+    private static final String STICKY_POST = "Sticky post";
+    private static final String NORMAL_POST = "Normal post";
+    private static final String NEW_POST = "New post";
+    private static final String TAG = "crimeListFragment";
+    
+
+    private List<Item> mItems;
+    private ArrayList<Post> mPosts;
+    private FragmentManager mManager;
+
+    public static RecyclerView sRecyclerView;
+    private MultiSelector mMultiSelector = new MultiSelector();
+    private ModalMultiSelectorCallback mDeleteMode = new ModalMultiSelectorCallback(mMultiSelector) {
+        @Override
+        public boolean onCreateActionMode(ActionMode actionMode, Menu menu){
+            super.onCreateActionMode(actionMode, menu);
+            getMenuInflater().inflate(R.menu.context_menu_post_in_action, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onActionItemClicked(android.support.v7.view.ActionMode mode, MenuItem item) {
+            if(item.getItemId() == R.id.menu_item_del){
+                // Need to finish the action mode before doing the following,
+                // not after. No idea why, but it crashes.
+                mode.finish();
+                for(int i = mPosts.size(); i >= 0; i--){
+                    if(mMultiSelector.isSelected(i, 0)){
+                        Item deleteItem = mItems.get(i);
+                        Post deletePost = deleteItem.getPost();
+                        mPosts.remove(deletePost);
+                        mItems.remove(deleteItem);
+                        sRecyclerView.getAdapter().notifyItemRemoved(i);
+                    }
+                }
+                mMultiSelector.clearSelections();
+                return true;
+            }
+            return false;
+        }
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_post_in_section);
+
+        mManager = getFragmentManager();
+        mItems = new ArrayList<>();
+        mPosts = PostLab.get(PostInSectionActivity.this).getPosts();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setLogo(R.mipmap.ic_launcher);
+
+        View footerTextView = ((LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.text_view_footer, null, false);
+
+        sRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            preparePortraitData();
+            sRecyclerView.setLayoutManager(new LinearLayoutManager(PostInSectionActivity.this, LinearLayoutManager.VERTICAL, false));
+            sRecyclerView.setAdapter(new ExpandableListAdapter(PostInSectionActivity.this, mItems, footerTextView, mMultiSelector, mDeleteMode));
+        } else {
+            prepareLandscapeData();
+            sRecyclerView.setLayoutManager(new GridLayoutManager(PostInSectionActivity.this, 3));
+            sRecyclerView.setAdapter(new ExpandableListAdapter(PostInSectionActivity.this, mItems, null, mMultiSelector, mDeleteMode));
+        }
+
+        if (mMultiSelector != null) {
+            Bundle bundle = savedInstanceState;
+            if (bundle != null) {
+                mMultiSelector.restoreSelectionStates(bundle.getBundle(TAG));
+            }
+
+            if (mMultiSelector.isSelectable()) {
+                if (mDeleteMode != null) {
+                    mDeleteMode.setClearOnPrepare(false);
+                    startSupportActionMode(mDeleteMode);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putBundle(TAG, mMultiSelector.saveSelectionStates());
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.option_menu_post_in_section, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.menu_item_add) {
+            NewPostDialog dialog = new NewPostDialog();
+            dialog.show(mManager, NEW_POST);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResultReturn(String postTitle){
+        Post newPost = new Post(1, "AutoModerator", "androiddev", postTitle, 0, "self.androiddev", 1, true);
+        mPosts.add(0, newPost);
+        Item newItem = new Item(ExpandableListAdapter.CHILD, STICKY_POST, newPost);
+        mItems.add(1,newItem);
+        sRecyclerView.getAdapter().notifyItemInserted(mItems.indexOf(newItem));
+    }
+
+    private void preparePortraitData() {
+        mMultiSelector.setPortrait(true);
+        mMultiSelector.setOffset(PostLab.get(this).getStickyCount());
+        if(mItems.size() > 0) mItems.clear();
+        mItems.add(new Item(ExpandableListAdapter.HEADER, STICKY_POST, null));
+        for (Post post : mPosts) {
+            if (post.isSticky()) mItems.add(new Item(ExpandableListAdapter.CHILD, null, post));
+        }
+        mItems.add(new Item(ExpandableListAdapter.HEADER, NORMAL_POST, null));
+        for (Post post : mPosts) {
+            if (!post.isSticky()) mItems.add(new Item(ExpandableListAdapter.CHILD, null, post));
+        }
+    }
+
+    private void prepareLandscapeData() {
+        mMultiSelector.setPortrait(false);
+        mMultiSelector.setOffset(PostLab.get(this).getStickyCount());
+        if(mItems.size() > 0) mItems.clear();
+        for (Post post : mPosts){
+            mItems.add(new Item(ExpandableListAdapter.LAND, null, post));
+        }
+    }
+}
