@@ -30,11 +30,8 @@ public class SettingsActivity extends AppCompatActivity {
                 .getBoolean(HIGH_SCORE, true);
 
         final TextView textView = (TextView) findViewById(R.id.text_view_time_count);
-        textView.setText(getString(R.string.timer, String.valueOf(mTimer + 5)));
 
         SeekBar seekBar = (SeekBar) findViewById(R.id.seek_bar_time_count);
-        seekBar.setMax(55);
-        seekBar.setProgress(mTimer);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int value = mTimer;
 
@@ -55,6 +52,8 @@ public class SettingsActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+        seekBar.setMax(55);
+        seekBar.setProgress(mTimer);
 
         Switch highscoreSwitch = (Switch) findViewById(R.id.switch_high_score);
         highscoreSwitch.setChecked(mSwitchCheck);
