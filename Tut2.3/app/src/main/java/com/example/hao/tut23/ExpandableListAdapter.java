@@ -43,8 +43,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                              boolean isLastChild, View convertView, ViewGroup parent) {
         Post post = (Post) getChild(groupPosition, childPosition);
 
-        LayoutInflater infalInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = infalInflater.inflate(R.layout.list_item, null);
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        convertView = inflater.inflate(R.layout.list_item, null);
 
         TextView textViewPostScore = (TextView) convertView.findViewById(R.id.text_view_post_score);
         textViewPostScore.setText(String.valueOf(post.getPostScore()));
@@ -100,9 +100,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                              View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this.mContext
+            LayoutInflater inflater = (LayoutInflater) this.mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.list_group, null);
+            convertView = inflater.inflate(R.layout.list_group, null);
         }
 
         TextView lblListHeader = (TextView) convertView

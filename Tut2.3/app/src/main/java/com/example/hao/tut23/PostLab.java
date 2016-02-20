@@ -10,11 +10,11 @@ import java.util.UUID;
  */
 public class PostLab {
     private static PostLab sPost;
-    private static Context mAppContext;
+    private Context mContext;
     private ArrayList<Post> mPosts;
 
     private PostLab(Context context) {
-        mAppContext = context;
+        mContext = context;
         mPosts = new ArrayList<Post>();
         mPosts.add(new Post(11, "AutoModerator", "androiddev", "Weekly \"who's hiring\" thread", 19, "self.androiddev", 2, true));
         mPosts.add(new Post(23, "Zhuinden", "androiddev", "Realm.io DB has finally added Nullable types to 0.83.0-SNAPSHOT", 3, "github.com", 5, false));

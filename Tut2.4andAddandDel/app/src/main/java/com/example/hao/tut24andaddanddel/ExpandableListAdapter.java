@@ -33,12 +33,18 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private MultiSelector mMultiSelector;
     private ModalMultiSelectorCallback mDeleteMode;
 
-    public ExpandableListAdapter(Context context, List<Item> items, View footer, MultiSelector multiSelector, ModalMultiSelectorCallback modalMultiSelectorCallback) {
+    public ExpandableListAdapter(Context context, List<Item> items, View footer) {
         mContext = context;
         mItems = items;
         mFooter = footer;
-        mDeleteMode = modalMultiSelectorCallback;
+    }
+
+    public void setMultiSelector(MultiSelector multiSelector) {
         mMultiSelector = multiSelector;
+    }
+
+    public void setDeleteMode(ModalMultiSelectorCallback deleteMode) {
+        mDeleteMode = deleteMode;
     }
 
     @Override
@@ -74,7 +80,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         int type = item.getType();
         switch (type) {
             case HEADER:
-                final ListHeaderViewHolder itemController = (ListHeaderViewHolder) holder;
+                ListHeaderViewHolder itemController = (ListHeaderViewHolder) holder;
                 itemController.bind(item);
                 break;
 

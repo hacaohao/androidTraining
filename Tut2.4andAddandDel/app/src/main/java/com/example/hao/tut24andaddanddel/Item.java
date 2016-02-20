@@ -28,8 +28,4 @@ public class Item {
     public String getHeader() {
         return mHeader;
     }
-
-    public void setType(int type){
-        mType = type;
-    }
 }

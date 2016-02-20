@@ -1,7 +1,6 @@
 package com.example.hao.tut24andaddanddel;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 
 import java.util.ArrayList;
@@ -36,21 +35,11 @@ import java.util.List;
 public class MultiSelector {
     private static final String SELECTION_POSITIONS = "position";
     private static final String SELECTIONS_STATE = "state";
-    private SparseBooleanArray mSelections = new SparseBooleanArray();
+    protected SparseBooleanArray mSelections = new SparseBooleanArray();
     private WeakHolderTracker mTracker = new WeakHolderTracker();
     private boolean mIsSelectable;
-    private int mOffset = 0;
-    private boolean mPortrait = true;
 
     public MultiSelector() {
-    }
-
-    public void setOffset(int offset) {
-        mOffset = offset;
-    }
-
-    public void setPortrait(boolean portrait) {
-        mPortrait = portrait;
     }
 
     /**
@@ -150,7 +139,7 @@ public class MultiSelector {
      */
     public void bindHolder(SelectableHolder holder, int position, long id) {
         mTracker.bindHolder(holder, position);
-         refreshHolder(holder);
+        refreshHolder(holder);
     }
 
     /**
@@ -238,31 +227,13 @@ public class MultiSelector {
 
     }
 
-    private void restoreSelections(List<Integer> selected) {
+    protected void restoreSelections(List<Integer> selected) {
         if (selected == null) return;
         int position;
         mSelections.clear();
         for (int i = 0; i < selected.size(); i++) {
             position = selected.get(i);
-            int offset;
-            if(mPortrait) {
-                if (position >= mOffset) {
-                    offset = 2;
-                } else {
-                    offset = 1;
-                }
-            }else{
-                if (position > mOffset) {
-                    offset = 2;
-                } else {
-                    offset = 1;
-                }
-                offset = - offset;
-            }
-
-            Log.i("haha", String.valueOf(position));
-            Log.i("haha", String.valueOf(offset));
-            mSelections.put(position + offset, true);
+            mSelections.put(position, true);
         }
         refreshAllHolders();
     }

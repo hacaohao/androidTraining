@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class PostInSectionActivity extends AppCompatActivity {
+    private static final String STICKY_POST = "Sticky post";
+    private static final String NORMAL_POST = "Normal post";
     private ArrayList<String> mGroups;
     private HashMap<String, ArrayList<Post>> mGroupChild;
     private ArrayList<Post> mPosts;
@@ -53,8 +55,8 @@ public class PostInSectionActivity extends AppCompatActivity {
         mGroups = new ArrayList<String>();
         mGroupChild = new HashMap<String, ArrayList<Post>>();
 
-        mGroups.add("Stiky posts");
-        mGroups.add("Normal posts");
+        mGroups.add(STICKY_POST);
+        mGroups.add(NORMAL_POST);
 
         ArrayList<Post> stikyPost = new ArrayList<Post>();
         for (Post post : mPosts) {

@@ -10,7 +10,7 @@ import java.util.UUID;
  */
 public class PostLab {
     private static PostLab sPost;
-    private static Context mAppContext;
+    private Context mAppContext;
     private ArrayList<Post> mPosts;
     private int mStickyCount;
 
@@ -57,5 +57,13 @@ public class PostLab {
 
     public int getStickyCount() {
         return mStickyCount;
+    }
+
+    public void addPost(int index, Post post){
+        mPosts.add(index, post);
+    }
+
+    public void deletePost(int index){
+        mPosts.remove(index);
     }
 }

@@ -44,8 +44,6 @@ public class PostInSectionActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(new GridLayoutManager(PostInSectionActivity.this, 3));
             recyclerView.setAdapter(new ExpandableListAdapter(PostInSectionActivity.this, mItems, null));
         }
-
-
     }
 
     private void preparePortraitData() {

@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">HowFastAreYou</string>
+    <string name="bt_start_text">START</string>
+    <string name="bt_resume_text">RESUME</string>
+    <string name="bt_tap_text">TAP</string>
+    <string name="settings_text">Settings</string>
+    <string name="time_limit">Time Limit</string>
+    <string name="timer">%1$s sec</string>
+    <string name="record_highscore">Record highscore</string>
+    <string name="highscore">Highscore</string>
+    <string name="clear">Clear</string>
+</resources>

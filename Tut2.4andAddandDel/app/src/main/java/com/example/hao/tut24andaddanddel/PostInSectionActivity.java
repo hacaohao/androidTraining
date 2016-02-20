@@ -24,13 +24,13 @@ public class PostInSectionActivity extends AppCompatActivity implements NewPostD
     private static final String NEW_POST = "New post";
     private static final String TAG = "crimeListFragment";
     
-
     private List<Item> mItems;
+    private PostLab mPostLab;
     private ArrayList<Post> mPosts;
     private FragmentManager mManager;
 
-    public static RecyclerView sRecyclerView;
-    private MultiSelector mMultiSelector = new MultiSelector();
+    public RecyclerView mRecyclerView;
+    private PostMultiSelector mMultiSelector = new PostMultiSelector();
     private ModalMultiSelectorCallback mDeleteMode = new ModalMultiSelectorCallback(mMultiSelector) {
         @Override
         public boolean onCreateActionMode(ActionMode actionMode, Menu menu){
@@ -49,9 +49,9 @@ public class PostInSectionActivity extends AppCompatActivity implements NewPostD
                     if(mMultiSelector.isSelected(i, 0)){
                         Item deleteItem = mItems.get(i);
                         Post deletePost = deleteItem.getPost();
-                        mPosts.remove(deletePost);
+                        mPostLab.deletePost(i);
                         mItems.remove(deleteItem);
-                        sRecyclerView.getAdapter().notifyItemRemoved(i);
+                        mRecyclerView.getAdapter().notifyItemRemoved(i);
                     }
                 }
                 mMultiSelector.clearSelections();
@@ -68,7 +68,9 @@ public class PostInSectionActivity extends AppCompatActivity implements NewPostD
 
         mManager = getFragmentManager();
         mItems = new ArrayList<>();
+        mPostLab = PostLab.get(this);
         mPosts = PostLab.get(PostInSectionActivity.this).getPosts();
+        mMultiSelector.setOffset(PostLab.get(this).getStickyCount());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -76,21 +78,25 @@ public class PostInSectionActivity extends AppCompatActivity implements NewPostD
 
         View footerTextView = ((LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.text_view_footer, null, false);
 
-        sRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        ExpandableListAdapter adapter = null;
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             preparePortraitData();
-            sRecyclerView.setLayoutManager(new LinearLayoutManager(PostInSectionActivity.this, LinearLayoutManager.VERTICAL, false));
-            sRecyclerView.setAdapter(new ExpandableListAdapter(PostInSectionActivity.this, mItems, footerTextView, mMultiSelector, mDeleteMode));
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(PostInSectionActivity.this, LinearLayoutManager.VERTICAL, false));
+            adapter = new ExpandableListAdapter(PostInSectionActivity.this, mItems, footerTextView);
+            
         } else {
             prepareLandscapeData();
-            sRecyclerView.setLayoutManager(new GridLayoutManager(PostInSectionActivity.this, 3));
-            sRecyclerView.setAdapter(new ExpandableListAdapter(PostInSectionActivity.this, mItems, null, mMultiSelector, mDeleteMode));
+            mRecyclerView.setLayoutManager(new GridLayoutManager(PostInSectionActivity.this, 3));
+            adapter = new ExpandableListAdapter(PostInSectionActivity.this, mItems, null);
         }
+        adapter.setDeleteMode(mDeleteMode);
+        adapter.setMultiSelector(mMultiSelector);
+        mRecyclerView.setAdapter(adapter);
 
         if (mMultiSelector != null) {
-            Bundle bundle = savedInstanceState;
-            if (bundle != null) {
-                mMultiSelector.restoreSelectionStates(bundle.getBundle(TAG));
+            if (savedInstanceState != null) {
+                mMultiSelector.restoreSelectionStates(savedInstanceState.getBundle(TAG));
             }
 
             if (mMultiSelector.isSelectable()) {
@@ -135,16 +141,14 @@ public class PostInSectionActivity extends AppCompatActivity implements NewPostD
     @Override
     public void onResultReturn(String postTitle){
         Post newPost = new Post(1, "AutoModerator", "androiddev", postTitle, 0, "self.androiddev", 1, true);
-        mPosts.add(0, newPost);
+        mPostLab.addPost(0, newPost);
         Item newItem = new Item(ExpandableListAdapter.CHILD, STICKY_POST, newPost);
         mItems.add(1,newItem);
-        sRecyclerView.getAdapter().notifyItemInserted(mItems.indexOf(newItem));
+        mRecyclerView.getAdapter().notifyItemInserted(mItems.indexOf(newItem));
     }
 
     private void preparePortraitData() {
         mMultiSelector.setPortrait(true);
-        mMultiSelector.setOffset(PostLab.get(this).getStickyCount());
-        if(mItems.size() > 0) mItems.clear();
         mItems.add(new Item(ExpandableListAdapter.HEADER, STICKY_POST, null));
         for (Post post : mPosts) {
             if (post.isSticky()) mItems.add(new Item(ExpandableListAdapter.CHILD, null, post));
@@ -157,8 +161,6 @@ public class PostInSectionActivity extends AppCompatActivity implements NewPostD
 
     private void prepareLandscapeData() {
         mMultiSelector.setPortrait(false);
-        mMultiSelector.setOffset(PostLab.get(this).getStickyCount());
-        if(mItems.size() > 0) mItems.clear();
         for (Post post : mPosts){
             mItems.add(new Item(ExpandableListAdapter.LAND, null, post));
         }

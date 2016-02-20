@@ -47,7 +47,8 @@
 
         <TextView
             android:id="@+id/text_view_date_time"
-            style="@style/textView.bottom"/>
+            style="@style/textView.bottom"
+            android:singleLine="true"/>
 
     </LinearLayout>
 
