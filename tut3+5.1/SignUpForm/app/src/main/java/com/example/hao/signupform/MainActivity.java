@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         else if (!isPhoneEmpty) mPhoneEditText.setError("You must enter phone");
         else if (!isPhoneValid) mPhoneEditText.setError("PhoneNumber is invalid");
         else if (mCurrentImage == null)
-            Toast.makeText(this, "You must choose an avatar", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "You must choose an avatar", Toast.LENGTH_SHORT).show();
         else {
             Intent intent = new Intent(MainActivity.this, Main2Activity.class);
             intent.putExtra(Main2Activity.EXTRA_FNAME, mFirstName);

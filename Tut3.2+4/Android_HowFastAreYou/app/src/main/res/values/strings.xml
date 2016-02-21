@@ -9,4 +9,5 @@
     <string name="record_highscore">Record highscore</string>
     <string name="highscore">Highscore</string>
     <string name="clear">Clear</string>
+    <string name="highscore_congrat">You get the new highscore</string>
 </resources>

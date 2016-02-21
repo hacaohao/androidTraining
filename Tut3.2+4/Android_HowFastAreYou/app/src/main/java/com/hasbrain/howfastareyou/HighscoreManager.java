@@ -45,4 +45,13 @@ public class HighscoreManager {
         cursor.close();
         return lastHighscore;
     }
+
+    public int getHighestHighscore(){
+        int highestHighscore = 0;
+        HighscoreDatabaseHelper.HighscoreCursor cursor = mHelper.queryHighestHighscore();
+        cursor.moveToFirst();
+        if(!cursor.isAfterLast()) highestHighscore = cursor.getHighestHighscore();
+        cursor.close();
+        return highestHighscore;
+    }
 }

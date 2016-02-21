@@ -58,6 +58,12 @@ public class HighscoreDatabaseHelper extends SQLiteOpenHelper {
         return new HighscoreCursor(wrapped);
     }
 
+    public HighscoreCursor queryHighestHighscore(){
+        Cursor wrapped = getReadableDatabase().query(TABLE_HIGHSCORE,
+                new String[]{COLUMN_HIGHSCORE_SCORE}, null, null, null, null, COLUMN_HIGHSCORE_SCORE + " DESC");
+        return new HighscoreCursor(wrapped);
+    }
+
     public static class HighscoreCursor extends CursorWrapper{
         public HighscoreCursor(Cursor cursor){
             super(cursor);
@@ -75,6 +81,12 @@ public class HighscoreDatabaseHelper extends SQLiteOpenHelper {
         public Date getLastHighscore(){
             if(isBeforeFirst() || isAfterLast()) return null;
             return new Date(getLong(getColumnIndex(COLUMN_HIGHSCORE_DATE)));
+        }
+
+        public int getHighestHighscore(){
+            if(isAfterLast() || isBeforeFirst()) return 0;
+            return getInt(getColumnIndex(COLUMN_HIGHSCORE_SCORE));
+
         }
     }
 }

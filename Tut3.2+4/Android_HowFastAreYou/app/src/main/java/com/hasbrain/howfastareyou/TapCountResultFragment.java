@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,40 +16,35 @@ import java.util.List;
  * Created by Jupiter (vu.cao.duy@gmail.com) on 10/14/15.
  */
 public class TapCountResultFragment extends Fragment {
-    private List<Tap> mTaps;
-    private RecyclerView mRecyclerView;
+    private static final String SAVED_COUNT = "saved count";
+    private TextView mTapCount;
+    private int mCount = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-        mTaps = new ArrayList<>();
+        if(savedInstanceState != null) {
+            mCount = savedInstanceState.getInt(SAVED_COUNT);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_count, parent, false);
 
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerview);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(new TapListAdapter(mTaps));
+        mTapCount = (TextView) v.findViewById(R.id.text_view_tap_count);
+        mTapCount.setText(String.valueOf(mCount));
 
         return v;
     }
 
-    public void addNewTap(Tap tap){
-        mTaps.add(tap);
-        mRecyclerView.getAdapter().notifyItemInserted(mTaps.size() - 1);
-        mRecyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                mRecyclerView.smoothScrollToPosition(mRecyclerView.getAdapter().getItemCount());
-            }
-        });
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        outState.putInt(SAVED_COUNT, mCount);
     }
 
-    public void clearTapList(){
-        mTaps.clear();
-        mRecyclerView.getAdapter().notifyDataSetChanged();
+    public void addNewTap(int tap){
+        mCount = tap;
+        mTapCount.setText(String.valueOf(mCount));
     }
 }

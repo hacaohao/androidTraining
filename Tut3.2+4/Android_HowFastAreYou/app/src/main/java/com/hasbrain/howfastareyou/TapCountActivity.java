@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.Toast;
 
 import java.util.Date;
 
@@ -41,6 +42,7 @@ public class TapCountActivity extends AppCompatActivity {
     private long mElapsedTime;
     private long mStartTime;
     private Date mLastHighscore = null;
+    private int mHighestHighscore = 0;
     private int mTapCount = 0;
     private String mTimer = "00:00";
 
@@ -135,8 +137,9 @@ public class TapCountActivity extends AppCompatActivity {
     @OnClick(R.id.bt_tap)
     public void onTapBtnClicked(View v) {
         TapCountResultFragment fragment = (TapCountResultFragment) mFragment;
-        fragment.addNewTap(new Tap(mTapCount, new Date()));
         mTapCount++;
+        fragment.addNewTap(mTapCount);
+
     }
 
     private void startTapping() {
@@ -151,6 +154,8 @@ public class TapCountActivity extends AppCompatActivity {
         mIsSaveHighscore = PreferenceManager.getDefaultSharedPreferences(TapCountActivity.this)
                 .getBoolean(SettingsActivity.HIGH_SCORE, true);
         if (mIsSaveHighscore) {
+            int highestHighscore = mManager.getHighestHighscore();
+            if(mTapCount > highestHighscore) Toast.makeText(this, R.string.highscore_congrat, Toast.LENGTH_LONG).show();
             mManager.insertHighscore(mTapCount);
             mLastHighscore = mManager.getLastHighscore();
         }else{
@@ -158,8 +163,6 @@ public class TapCountActivity extends AppCompatActivity {
         }
         if(mTapCount > 0){
             mTapCount = 0;
-            TapCountResultFragment fragment = (TapCountResultFragment) mFragment;
-            fragment.clearTapList();
         }
         updateFragment(HighscoreFragment.newInstance(mLastHighscore));
         tvTime.stop();
