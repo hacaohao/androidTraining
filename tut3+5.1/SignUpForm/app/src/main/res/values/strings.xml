@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">SignUpForm</string>
+    <string name="main_text">STEP 1</string>
+    <string name="second_text">STEP 2</string>
+    <string name="third_text">STEP 3</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="email_text">abc@gmail</string>
+    <string name="phone_number">Phone number</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="next">NEXT</string>
+    <string name="salary_text">Your salary: %1$s dollars</string>
+    <string name="sport_choose">Which sports do you like?</string>
+    <string name="$0">$0</string>
+    <string name="$100000">$100000</string>
+    <string name="football">Football</string>
+    <string name="tennis">Tennis</string>
+    <string name="ping_pong">Ping pong</string>
+    <string name="swimming">Swimming</string>
+    <string name="volleyball">Volleyball</string>
+    <string name="basketball">Basketball</string>
+    <string name="done">DONE</string>
+    <string name="main3_text">Thank you for filling information. What do you want to do next?</string>
+    <string name="send_mail">SEND MAIL</string>
+    <string name="restart">Restart</string>
+</resources>
