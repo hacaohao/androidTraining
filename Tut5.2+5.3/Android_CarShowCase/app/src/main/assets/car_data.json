@@ -1,0 +1,93 @@
+[
+  {
+    "id": 1,
+    "name": "A5 convertible",
+    "brand": "Audi",
+    "color": "black",
+    "imageFile": "audi_a5_convertible"
+  },
+  {
+    "id": 2,
+    "name": "Premium Plus",
+    "brand": "Audi",
+    "color": "white",
+    "imageFile": "audi_premium_plus"
+  },
+  {
+    "id": 3,
+    "name": "Prestige",
+    "brand": "Audi",
+    "color": "black",
+    "imageFile": "audi_prestige"
+  },
+  {
+    "id": 4,
+    "name": "535i",
+    "brand": "BMW",
+    "color": "white",
+    "imageFile": "bmw_535i"
+  },
+  {
+    "id": 5,
+    "name": "650i Grand Coupe",
+    "brand": "BMW",
+    "color": "black",
+    "imageFile": "bmw_650i_gran_coupe"
+  },
+  {
+    "id": 6,
+    "name": "aDrive 35is",
+    "brand": "BMW",
+    "color": "white",
+    "imageFile": "bmw_adrive35is"
+  },
+  {
+    "id": 7,
+    "name": "M6 Gran Coupe",
+    "brand": "BMW",
+    "color": "black",
+    "imageFile": "bmw_m6_gran_coupe"
+  },
+  {
+    "id": 8,
+    "name": "M235i",
+    "brand": "BMW",
+    "color": "white",
+    "imageFile": "bmw_m235i"
+  },
+  {
+    "id": 7,
+    "name": "xDrive35i",
+    "brand": "BMW",
+    "color": "black",
+    "imageFile": "bmw_xdrive35i"
+  },
+  {
+    "id": 8,
+    "name": "LP 560",
+    "brand": "Lamborghini",
+    "color": "white",
+    "imageFile": "lambo_lp_560"
+  },
+  {
+    "id": 9,
+    "name": "LP 640",
+    "brand": "Lamborghini",
+    "color": "yellow",
+    "imageFile": "lambo_lp_640"
+  },
+  {
+    "id": 10,
+    "name": "Roadster",
+    "brand": "Lamborghini",
+    "color": "grey",
+    "imageFile": "lambo_roadster"
+  },
+  {
+    "id": 11,
+    "name": "Spyder",
+    "brand": "Lamborghini",
+    "color": "blue",
+    "imageFile": "lambo_spyder"
+  }
+]
